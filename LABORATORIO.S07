@@ -1,1 +1,53 @@
+insert / delete /update over, pivot
 
+
+-- INSERT
+
+INSERT INTO CLIENTES
+(codcliente, nomcliente, apepcliente, apemcliente, razonsocial, ruc)
+VALUES
+('C0017','RICHI','Soto','Mayor',NULL,NULL),
+('C0018',NULL,NULL,NULL,'Tambo SAC','4564767444')
+
+INSERT INTO MARCA
+(codmarca, desmarca)
+VALUES
+('M0009','Gloria'),
+('M0010','Alicorp')
+
+--UPDATE
+UPDATE CLIENTES
+SET nomcliente = 'Juan'
+WHERE codcliente = 'C0011'
+
+SELECT*FROM CLIENTES
+
+--DELETE
+DELETE FROM CLIENTES
+WHERE codcliente = 'C0015'
+
+DELETE FROM MARCA
+WHERE codmarca = 'M0009'
+
+DELETE FROM PRODUCTO
+WHERE codprod = 'P0012'
+
+
+--OVER
+SELECT codventa,
+       montototal,
+       SUM(montototal) OVER (ORDER BY codventa) AS acumulado
+FROM COMPROBANTE
+
+--PIVOT
+SELECT *
+FROM (
+    SELECT t.nomtipo, cp.subtotalxprod
+    FROM COMPRO_PRODU cp
+    JOIN PRODUCTO p ON cp.codprod = p.codprod
+    JOIN TIPOPRODU t ON p.codtipo = t.codtipo
+) AS datos
+PIVOT (
+    SUM(subtotalxprod)
+    FOR nomtipo IN ([Atun],[Aceite],[Arroz],[Cafe],[Mantequilla],[Yogurt],[Jamonada],[Fideos])
+) AS resultado
