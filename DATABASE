@@ -1,0 +1,157 @@
+CREATE DATABASE VENTAS
+use ventas
+
+CREATE TABLE CLIENTES
+(
+codcliente char(5) not null,
+nomcliente varchar(20) null,
+apepcliente varchar(20) null,
+apemcliente varchar(20) null,
+razonsocial varchar(30) null,
+ruc char(11) null,
+constraint pk_cliente primary key (codcliente)
+)
+CREATE TABLE TIPOPRODU
+(
+codtipo char(3) not null,
+nomtipo varchar(20) not null,
+constraint pk_tipo primary key(codtipo)
+)
+CREATE TABLE LOTE
+(
+codlote char(5) not null,
+deslote varchar(20) not null,
+constraint pk_lote primary key(codlote)
+)
+CREATE TABLE MARCA
+(
+codmarca char(5) not null,
+desmarca varchar(20) not null,
+constraint pk_marca primary key(codmarca)
+)
+CREATE TABLE COMPROBANTE
+(
+codventa char(5) not null,
+fechemisi datetime not null,
+montototal decimal(9,2) not null,
+cantidadtotal smallint not null,
+igv decimal(9,2) not null,
+codcliente char(5) not null,
+subtotal decimal(9,2) not null,
+constraint pk_compro primary key(codventa),
+constraint fk_compro foreign key(codcliente) references CLIENTES(codcliente)
+)
+CREATE TABLE PRODUCTO
+(
+codprod char(5) not null,
+nomprod varchar(20) not null,
+precio decimal(8,2) not null,
+codtipo char(3) not null,
+stock smallint not null,
+codlote char(5) not null,
+codmarca char(5) not null,
+constraint pk_producto primary key(codprod),
+constraint fk_tipo foreign key(codtipo) references TIPOPRODU(codtipo),
+constraint fk_lote foreign key(codlote) references LOTE(codlote),
+constraint fk_marca foreign key(codmarca) references MARCA(codmarca)
+)
+CREATE TABLE COMPRO_PRODU
+(
+codventa char(5) not null,
+codprod char(5) not null,
+cantxprod smallint not null,
+subtotalxprod decimal(9,2) not null,
+constraint fk_prod1 foreign key(codventa) references COMPROBANTE(codventa),
+constraint fk_prod2 foreign key(codprod) references PRODUCTO(codprod),
+constraint pk_compuesta primary key(codventa,codprod)
+)
+	
+INSERT INTO CLIENTES
+VALUES ('C0001','Katia','Huanca','Gonzales',null,null),
+('C0002','Milagros','Briceño','Morales',null,null),
+('C0003',null,null,null,'Leche Gloria','20319824738'),
+('C0004','Erika','Castillo','Lopez',null,null),
+('C0005','Jose','Tito','Cenccho',null,null),
+('C0006','Edwin','Guzman','Apaza',null,null),
+('C0007','Laura','Gutierrez','Bellido','',''),
+('C0008',null,null,null,'Empresa Kaita','24561378203'),
+('C0009','Luis','Perez','Ramos',null,null),
+('C0010','Ana','Torres','Diaz',null,null),
+('C0011',null,null,null,'Corporacion Andina','20123456789'),
+('C0012','Mario','Quispe','Flores',null,null)
+
+INSERT INTO MARCA
+VALUES ('M0001','Florida'),
+('M0002','Primor'),
+('M0003','Costeño'),
+('M0004','Nescafe'),
+('M0005','laive'),
+('M0006','Griego'),
+('M0007','Preferida'),
+('M0008','San Jorge')
+
+INSERT INTO LOTE
+VALUES ('L0001','Lote Atunes'),
+('L0002','Lote Aceites'),
+('L0003','Lote Arroz'),
+('L0004','Lote Cafe'),
+('L0005','Lote Mantequilla'),
+('L0006','Lote Yogurt'),
+('L0007','Lote Jamonada'),
+('L0008','Lote Fideos')
+
+INSERT INTO TIPOPRODU
+VALUES ('TP1','Atun'),
+('TP2','Aceite'),
+('TP3','Arroz'),
+('TP4','Cafe'),
+('TP5','Mantequilla'),
+('TP6','Yogurt'),
+('TP7','Jamonada'),
+('TP8','Fideos')
+
+INSERT INTO COMPROBANTE
+VALUES 
+('CO001','2025-09-27 13:20:59.001','206.50','8','0.18','C0001','175.00'),
+('CO002','2025-08-26 13:15:00.002','2537.00','45','0.18','C0002','2150.00'),
+('CO003','2025-09-13 11:30:17.003','590.00','15','0.18','C0003','500.00'),
+('CO004','2025-08-25 12:40:58.004','88.50','6','0.18','C0004','75.00'),
+('CO005','2025-08-09 14:50:53.005','10030.00','50','0.18','C0005','8500.00'),
+('CO006','2025-08-16 12:07:24.002','242.08','11','0.18','C0006','205.15'),
+('CO007','2025-07-18 09:13:21.020','213.57','15','0.18','C0007','180.99'),
+('CO008','2025-08-20 15:29:55.112','365.80','17','0.18','C0008','310.00'),
+('CO009','2025-09-10 10:10:00','150.00','10','0.18','C0009','127.12'),
+('CO010','2025-09-11 11:30:00','320.00','20','0.18','C0010','271.18'),
+('CO011','2025-09-12 12:00:00','500.00','25','0.18','C0011','423.73'),
+('CO012','2025-09-13 13:45:00','210.00','12','0.18','C0012','177.97')
+
+INSERT INTO PRODUCTO
+VALUES 
+('P0001','Filete','6.50','TP1','40','L0001','M0001'),
+('P0002','Tradicional','15.00','TP5','25','L0005','M0005'),
+('P0003','Descafeinado','4.00','TP4','90','L0004','M0004'),
+('P0004','Pollo','2.20','TP7','10','L0007','M0007'),
+('P0005','Codito','5.00','TP8','30','L0008','M0008'),
+('P0006','Deslactosado','18.00','TP6','20','L0006','M0006'),
+('P0007','Granulado','28.00','TP3','15','L0003','M0003'),
+('P0008','Vegetal','14.00','TP2','28','L0002','M0002'),
+('P0009','Integral','6.80','TP8','50','L0008','M0008'),
+('P0010','Premium','22.00','TP3','35','L0003','M0003'),
+('P0011','Light','12.50','TP2','40','L0002','M0002'),
+('P0012','Espresso','7.00','TP4','60','L0004','M0004')
+
+INSERT INTO COMPRO_PRODU
+VALUES 
+('CO003','P0001','10','65'),
+('CO004','P0003','5','20'),
+('CO005','P0005','4','20'),
+('CO002','P0008','12','168'),
+('CO001','P0004','3','6.6'),
+('CO006','P0002','2','30'),
+('CO007','P0006','9','162'),
+('CO008','P0007','18','504'),
+('CO009','P0009','5','34'),
+('CO009','P0001','5','32.5'),
+('CO010','P0010','10','220'),
+('CO011','P0003','10','40'),
+('CO012','P0004','6','13.2')
