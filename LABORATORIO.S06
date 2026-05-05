@@ -1,0 +1,39 @@
+# LABORATORIOBASEDEDATOS
+
+create database tienda
+use tienda
+
+create table cliente(
+idcliente char(8) not null primary key,
+nombre varchar (30) not null,
+ciudad varchar(30) not null,
+edad int,
+)
+
+create table pedido(
+idpedido char(8) not null primary key,
+monto decimal(8,2) not null,
+producto varchar (30) not null,
+idcliente char(8) not null,
+foreign key (idcliente) references cliente(idcliente)
+)
+
+insert cliente values 
+(0001,'Erick','Arequipa',15),
+(0002,'Rene','Lima',25),
+(0003,'Juan','Ica',65),
+(0004,'Jack','Trujillo',35)
+
+insert pedido values 
+('P01',15.4,'alicate',0001),
+('P02',257,'manguera',0002),
+('P03',32.5,'disco',0001),
+('P04',127.5,'memoria',0003)
+
+select*from cliente
+select*from pedido
+
+select pedido.producto, cliente.nombre
+from pedido
+inner join cliente
+on pedido.idcliente=cliente.idcliente
